@@ -1,0 +1,57 @@
+﻿@model User
+@using (Html.BeginForm("Create", "User", FormMethod.Post, new { @class = "container mx-auto py-8 md:w-2/3 sm:w-4/5 w-5/6 bg-white text-black" }))
+{
+    <h2 class="text-2xl font-bold mb-4 text-center">Edit Account</h2>
+
+    <div class="mb-4">
+        <div class="flex items-center">
+            <label for="username" class="block mr-2">UserName:</label>
+            @Html.TextBoxFor(m => m.username, new { @class = "w-full border border-gray-300 rounded-md py-2 px-3", @placeholder = "Enter the user name" })
+            @Html.ValidationMessageFor(m => m.username, "", new { @class = "text-red-500" })
+        </div>
+    </div>
+
+    <div class="mb-4">
+        <div class="flex items-center">
+            <label for="password" class="block mr-2">Password:</label>
+            @Html.PasswordFor(m => m.password, new { @class = "w-full border border-gray-300 rounded-md py-2 px-3", @placeholder = "Enter the password" })
+            @Html.ValidationMessageFor(m => m.password, "", new { @class = "text-red-500" })
+        </div>
+    </div>
+
+    <div class="mb-4">
+        <div class="flex items-center">
+            <label for="userCode" class="block mr-2">UserCode: </label>
+            @Html.TextBoxFor(m => m.id, new { @class = "w-full border border-gray-300 rounded-md py-2 px-3", @placeholder = "Enter the code" })
+            @Html.ValidationMessageFor(m => m.id, "", new { @class = "text-red-500" })
+        </div>
+    </div>
+
+    <div class="mb-4">
+        <div class="flex items-center">
+            <label for="name" class="block mr-2">Name:</label>
+            @Html.TextBoxFor(m => m.name, new { @class = "w-full border border-gray-300 rounded-md py-2 px-3", @placeholder = "Enter the name" })
+            @Html.ValidationMessageFor(m => m.name, "", new { @class = "text-red-500" })
+        </div>
+    </div>
+
+    <div class="mb-4">
+        <div class="flex items-center">
+            <label for="phone" class="block mr-2">Phone:</label>
+            @Html.TextBoxFor(m => m.phone, new { @class = "w-full border border-gray-300 rounded-md py-2 px-3", @placeholder = "Enter the phone" })
+            @Html.ValidationMessageFor(m => m.phone, "", new { @class = "text-red-500" })
+        </div>
+    </div>
+
+    <div class="mb-4">
+        <div class="flex items-center">
+            <label for="role" class="block mr-2">Role:</label>
+            @Html.TextBoxFor(m => m!.Role!.name, new { @class = "w-full border border-gray-300 rounded-md py-2 px-3", @placeholder = "Enter the role" })
+            @Html.ValidationMessageFor(m => m!.Role!.name, "", new { @class = "text-red-500" })
+        </div>
+    </div>
+
+    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded w-full mt-6">
+        Create
+    </button>
+}

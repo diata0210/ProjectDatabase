@@ -1,0 +1,26 @@
+﻿@model IEnumerable<ProjectDatabase.Models.User>
+
+<table id="myTable" class="table-auto w-full border-collapse table-striped table-bordered border border-gray-300 shadow-lg">
+    <thead class="bg-gray-800 text-white">
+        <tr>
+            <th class="py-2 px-4 border-b">User Name</th>
+            <th class="py-2 px-4 border-b">Password</th>
+            <th class="py-2 px-4 border-b">Role</th>
+            <th class="py-2 px-4 border-b">Operate</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td class="py-2 px-4 border-b">@user.username</td>
+                <td class="py-2 px-4 border-b">@user.password</td>
+                <td class="py-2 px-4 border-b">@user.role_id</td>
+                <td class="py-2 px-4 border-b">
+                    <a href="@Url.Action("Edit", "User", new { id = user.id })">Edit</a> |
+                    <a href="@Url.Action("Delete", "User", new { id = user.id })">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,48 @@
+﻿<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+} 
+<div>
+    <table id="myTable" class="table-auto w-full border-collapse table-striped table-bordered border border-gray-300 shadow-lg">
+        <thead class="bg-gray-800 text-white">
+            <tr>
+                <th class="py-2 px-4 border-b">Id</th>
+                <th class="py-2 px-4 border-b">Product</th>
+                <th class="py-2 px-4 border-b">Customer</th>
+                <th class="py-2 px-4 border-b">User</th>
+                <th class="py-2 px-4 border-b">Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Add table rows and data dynamically -->
+        </tbody>
+    </table>
+
+    <script>
+        var data = [
+            { id: 1, product: 'Product 1', customer: 'Customer 1', user: 'User 1', date: '2023-06-18' },
+            { id: 2, product: 'Product 2', customer: 'Customer 2', user: 'User 2', date: '2023-06-19' },
+            { id: 3, product: 'Product 3', customer: 'Customer 3', user: 'User 3', date: '2023-06-20' },
+            { id: 4, product: 'Product 4', customer: 'Customer 3', user: 'User 3', date: '2023-06-20' },
+            { id: 5, product: 'Product 5', customer: 'Customer 3', user: 'User 3', date: '2023-06-20' }
+        ];
+
+        var tableBody = document.querySelector('#myTable tbody');
+
+        data.forEach(function (item) {
+            var row = document.createElement('tr');
+            row.innerHTML = `
+              <td class="py-2 px-4 border-b text-center">${item.id}</td>
+              <td class="py-2 px-4 border-b text-center">${item.product}</td>
+              <td class="py-2 px-4 border-b text-center">${item.customer}</td>
+              <td class="py-2 px-4 border-b text-center">${item.user}</td>
+              <td class="py-2 px-4 border-b text-center">${item.date}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+    </script>
+
+</div>
