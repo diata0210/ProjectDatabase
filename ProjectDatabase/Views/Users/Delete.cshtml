@@ -1,0 +1,61 @@
+﻿@model ProjectDatabase.Models.User
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="mx-auto w-2/3 my-4 mt-20">
+    <div>
+       <h1 class="text-center font-bold text-2xl mb-4">Delete User</h1>
+     <form asp-action="Delete" class="border border-gray-300 p-4 rounded">
+    <h3 class="text-center mb-4">Are you sure you want to delete this?</h3>
+
+    <div class="grid grid-cols-2 gap-4">
+        <div class="col-span-1">
+            <label class="font-bold">Username:</label>
+        </div>
+        <div class="col-span-1">
+            <span>@Model.username</span>
+        </div>
+        <div class="col-span-1">
+            <label class="font-bold">Password:</label>
+        </div>
+        <div class="col-span-1">
+            <span>@Model.password</span>
+        </div>
+        <div class="col-span-1">
+            <label class="font-bold">Name:</label>
+        </div>
+        <div class="col-span-1">
+            <span>@Model.name</span>
+        </div>
+        <div class="col-span-1">
+            <label class="font-bold">Phone:</label>
+        </div>
+        <div class="col-span-1">
+            <span>@Model.phone</span>
+        </div>
+        <div class="col-span-1">
+            <label class="font-bold">Role:</label>
+        </div>
+        <div class="col-span-1">
+            <span>@Model.Role.name</span>
+        </div>
+        <div class="col-span-1">
+           <label class="font-bold">Store:</label>
+        </div>
+        <div class="col-span-1">
+            <span>@Model.Store.name</span>
+        </div>
+    </div>
+
+    <div class="flex justify-between mt-4">
+        <input type="hidden" asp-for="id" />
+        <input type="submit" value="Delete" class="px-4 py-2 bg-red-500 text-white font-bold rounded hover:bg-red-600" />
+        <a asp-action="Index" class="px-4 py-2 bg-gray-500 text-white font-bold rounded hover:bg-gray-600">Cancel</a>
+    </div>
+</form>
+    </div>
+</div>
+

@@ -6,21 +6,25 @@ namespace ProjectDatabase.Models
     public class Store_product
     {
         [Key]
-        [Required]
-        [MaxLength(8)]
-        public string? id { get; set; }
-        [Required]
-        [ForeignKey("Store")]
-        [MaxLength(8)]
-        public string ? store_id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // Thiết lập tự động tăng cho ID
+
+        public int id { get; set; }
+        public int store_id { get; set; }
         public Store? Store { get; set; }
-        [Required]
-        [ForeignKey("Product")]
-        [MaxLength(8)]
-        public string  ? product_id { get; set; }
+        public int product_id { get; set; }
         public Product? Product { get; set; }
-        [Required]
-        public int quantity { get; set; } = 0;
+        private int _quantity = 0;
+
+        public int quantity { 
+            get { return _quantity; }
+            set { 
+                if(value < 0)
+                {
+                    throw new InvalidOperationException("Số lượng không hợp lệ.");
+                }
+                _quantity = value;
+            }
+        }
         
     }
 }

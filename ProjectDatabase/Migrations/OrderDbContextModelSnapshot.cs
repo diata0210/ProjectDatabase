@@ -24,62 +24,65 @@ namespace ProjectDatabase.Migrations
 
             modelBuilder.Entity("ProjectDatabase.Models.Customer", b =>
                 {
-                    b.Property<string>("id")
-                        .HasMaxLength(8)
-                        .HasColumnType("character varying(8)");
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
                     b.Property<DateTime>("dob")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("membership_id")
-                        .IsRequired()
-                        .HasMaxLength(11)
-                        .HasColumnType("character varying(11)");
+                    b.Property<int>("membership_id")
+                        .HasColumnType("integer");
 
                     b.Property<string>("name")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
 
                     b.Property<string>("phone")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(11)
+                        .HasColumnType("character varying(11)");
 
                     b.HasKey("id");
 
                     b.HasIndex("membership_id");
 
-                    b.ToTable("Customer");
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("ProjectDatabase.Models.District", b =>
                 {
-                    b.Property<string>("id")
-                        .HasMaxLength(8)
-                        .HasColumnType("character varying(8)");
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
                     b.Property<string>("name")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
 
-                    b.Property<string>("province_id")
-                        .IsRequired()
-                        .HasMaxLength(8)
-                        .HasColumnType("character varying(8)");
+                    b.Property<int>("province_id")
+                        .HasColumnType("integer");
 
                     b.HasKey("id");
 
                     b.HasIndex("province_id");
 
-                    b.ToTable("District");
+                    b.ToTable("Districts");
                 });
 
             modelBuilder.Entity("ProjectDatabase.Models.Membership", b =>
                 {
-                    b.Property<string>("id")
-                        .HasMaxLength(8)
-                        .HasColumnType("character varying(8)");
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
                     b.Property<string>("description")
                         .HasMaxLength(1000)
@@ -90,30 +93,30 @@ namespace ProjectDatabase.Migrations
 
                     b.Property<string>("name")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
 
                     b.HasKey("id");
 
-                    b.ToTable("Membership");
+                    b.ToTable("Memberships");
                 });
 
             modelBuilder.Entity("ProjectDatabase.Models.Order", b =>
                 {
-                    b.Property<string>("id")
-                        .HasMaxLength(8)
-                        .HasColumnType("character varying(8)");
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
                     b.Property<DateTime>("create_at")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("create_by")
-                        .HasMaxLength(8)
-                        .HasColumnType("character varying(8)");
+                    b.Property<int>("create_by")
+                        .HasColumnType("integer");
 
-                    b.Property<string>("customer_id")
-                        .HasMaxLength(8)
-                        .HasColumnType("character varying(8)");
+                    b.Property<int?>("customer_id")
+                        .HasColumnType("integer");
 
                     b.Property<decimal>("discount_membership")
                         .HasColumnType("numeric");
@@ -126,18 +129,14 @@ namespace ProjectDatabase.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
 
-                    b.Property<string>("store_id")
-                        .IsRequired()
-                        .HasMaxLength(8)
-                        .HasColumnType("character varying(8)");
+                    b.Property<int>("store_id")
+                        .HasColumnType("integer");
 
                     b.Property<decimal>("total_price")
                         .HasColumnType("numeric");
 
-                    b.Property<string>("type")
-                        .IsRequired()
-                        .HasMaxLength(8)
-                        .HasColumnType("character varying(8)");
+                    b.Property<int>("type")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("update_at")
                         .HasColumnType("timestamp with time zone");
@@ -152,14 +151,16 @@ namespace ProjectDatabase.Migrations
 
                     b.HasIndex("type");
 
-                    b.ToTable("Order");
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("ProjectDatabase.Models.Order_type", b =>
                 {
-                    b.Property<string>("id")
-                        .HasMaxLength(8)
-                        .HasColumnType("character varying(8)");
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
                     b.Property<string>("description")
                         .HasMaxLength(1000)
@@ -167,29 +168,27 @@ namespace ProjectDatabase.Migrations
 
                     b.Property<string>("name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
 
                     b.HasKey("id");
 
-                    b.ToTable("Order_type");
+                    b.ToTable("Order_types");
                 });
 
             modelBuilder.Entity("ProjectDatabase.Models.Orderline", b =>
                 {
-                    b.Property<string>("id")
-                        .HasMaxLength(8)
-                        .HasColumnType("character varying(8)");
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
 
-                    b.Property<string>("order_id")
-                        .IsRequired()
-                        .HasMaxLength(8)
-                        .HasColumnType("character varying(8)");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
-                    b.Property<string>("product_id")
-                        .IsRequired()
-                        .HasMaxLength(8)
-                        .HasColumnType("character varying(8)");
+                    b.Property<int>("order_id")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("product_id")
+                        .HasColumnType("integer");
 
                     b.Property<int>("quantity")
                         .HasColumnType("integer");
@@ -200,51 +199,53 @@ namespace ProjectDatabase.Migrations
 
                     b.HasIndex("product_id");
 
-                    b.ToTable("Orderline");
+                    b.ToTable("Orderlines");
                 });
 
             modelBuilder.Entity("ProjectDatabase.Models.Product", b =>
                 {
-                    b.Property<string>("id")
-                        .HasMaxLength(8)
-                        .HasColumnType("character varying(8)");
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
 
-                    b.Property<string>("Description")
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
+
+                    b.Property<DateTime?>("delete_at")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("description")
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
-
-                    b.Property<decimal?>("Price")
-                        .IsRequired()
-                        .HasColumnType("numeric");
-
-                    b.Property<DateTime>("deleteAt")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<float>("discount")
                         .HasColumnType("real");
 
                     b.Property<string>("name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
 
-                    b.Property<string>("type")
+                    b.Property<decimal?>("price")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("numeric");
+
+                    b.Property<int>("type")
+                        .HasColumnType("integer");
 
                     b.HasKey("id");
 
                     b.HasIndex("type");
 
-                    b.ToTable("Product");
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("ProjectDatabase.Models.Product_type", b =>
                 {
-                    b.Property<string>("id")
-                        .HasMaxLength(8)
-                        .HasColumnType("character varying(8)");
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
                     b.Property<string>("description")
                         .HasMaxLength(1000)
@@ -252,35 +253,39 @@ namespace ProjectDatabase.Migrations
 
                     b.Property<string>("name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
 
                     b.HasKey("id");
 
-                    b.ToTable("Product_Type");
+                    b.ToTable("Product_Types");
                 });
 
             modelBuilder.Entity("ProjectDatabase.Models.Province", b =>
                 {
-                    b.Property<string>("id")
-                        .HasMaxLength(8)
-                        .HasColumnType("character varying(8)");
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
                     b.Property<string>("name")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
 
                     b.HasKey("id");
 
-                    b.ToTable("Province");
+                    b.ToTable("Provinces");
                 });
 
             modelBuilder.Entity("ProjectDatabase.Models.Role", b =>
                 {
-                    b.Property<string>("id")
-                        .HasMaxLength(8)
-                        .HasColumnType("character varying(8)");
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
                     b.Property<string>("description")
                         .IsRequired()
@@ -289,39 +294,41 @@ namespace ProjectDatabase.Migrations
 
                     b.Property<string>("name")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
 
                     b.HasKey("id");
 
-                    b.ToTable("Role");
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("ProjectDatabase.Models.Store", b =>
                 {
-                    b.Property<string>("id")
-                        .HasMaxLength(8)
-                        .HasColumnType("character varying(8)");
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
+
+                    b.Property<string>("address")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
 
                     b.Property<string>("description")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("character varying(30)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
 
-                    b.Property<string>("district_id")
-                        .IsRequired()
-                        .HasMaxLength(8)
-                        .HasColumnType("character varying(8)");
+                    b.Property<int>("district_id")
+                        .HasColumnType("integer");
 
                     b.Property<string>("name")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
 
-                    b.Property<string>("province_id")
-                        .IsRequired()
-                        .HasMaxLength(8)
-                        .HasColumnType("character varying(8)");
+                    b.Property<int>("province_id")
+                        .HasColumnType("integer");
 
                     b.HasKey("id");
 
@@ -329,27 +336,25 @@ namespace ProjectDatabase.Migrations
 
                     b.HasIndex("province_id");
 
-                    b.ToTable("Store");
+                    b.ToTable("Stores");
                 });
 
             modelBuilder.Entity("ProjectDatabase.Models.Store_product", b =>
                 {
-                    b.Property<string>("id")
-                        .HasMaxLength(8)
-                        .HasColumnType("character varying(8)");
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
 
-                    b.Property<string>("product_id")
-                        .IsRequired()
-                        .HasMaxLength(8)
-                        .HasColumnType("character varying(8)");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
+
+                    b.Property<int>("product_id")
+                        .HasColumnType("integer");
 
                     b.Property<int>("quantity")
                         .HasColumnType("integer");
 
-                    b.Property<string>("store_id")
-                        .IsRequired()
-                        .HasMaxLength(8)
-                        .HasColumnType("character varying(8)");
+                    b.Property<int>("store_id")
+                        .HasColumnType("integer");
 
                     b.HasKey("id");
 
@@ -357,43 +362,42 @@ namespace ProjectDatabase.Migrations
 
                     b.HasIndex("store_id");
 
-                    b.ToTable("Store_product");
+                    b.ToTable("Store_products");
                 });
 
             modelBuilder.Entity("ProjectDatabase.Models.User", b =>
                 {
-                    b.Property<string>("id")
-                        .HasMaxLength(8)
-                        .HasColumnType("character varying(8)");
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
                     b.Property<string>("name")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("character varying(30)");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("password")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("phone")
                         .IsRequired()
                         .HasMaxLength(11)
                         .HasColumnType("character varying(11)");
 
-                    b.Property<string>("role_id")
-                        .IsRequired()
-                        .HasMaxLength(8)
-                        .HasColumnType("character varying(8)");
+                    b.Property<int>("role_id")
+                        .HasColumnType("integer");
 
-                    b.Property<string>("store_id")
-                        .HasMaxLength(8)
-                        .HasColumnType("character varying(8)");
+                    b.Property<int?>("store_id")
+                        .HasColumnType("integer");
 
                     b.Property<string>("username")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("character varying(30)");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("id");
 
@@ -401,13 +405,13 @@ namespace ProjectDatabase.Migrations
 
                     b.HasIndex("store_id");
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("ProjectDatabase.Models.Customer", b =>
                 {
                     b.HasOne("ProjectDatabase.Models.Membership", "Membership")
-                        .WithMany("Customer")
+                        .WithMany("Customers")
                         .HasForeignKey("membership_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -418,7 +422,7 @@ namespace ProjectDatabase.Migrations
             modelBuilder.Entity("ProjectDatabase.Models.District", b =>
                 {
                     b.HasOne("ProjectDatabase.Models.Province", "Province")
-                        .WithMany("District")
+                        .WithMany("Districts")
                         .HasForeignKey("province_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -429,21 +433,23 @@ namespace ProjectDatabase.Migrations
             modelBuilder.Entity("ProjectDatabase.Models.Order", b =>
                 {
                     b.HasOne("ProjectDatabase.Models.User", "User")
-                        .WithMany("Order")
-                        .HasForeignKey("create_by");
+                        .WithMany("Orders")
+                        .HasForeignKey("create_by")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ProjectDatabase.Models.Customer", "Customer")
-                        .WithMany("Order")
+                        .WithMany("Orders")
                         .HasForeignKey("customer_id");
 
                     b.HasOne("ProjectDatabase.Models.Store", "Store")
-                        .WithMany("Order")
+                        .WithMany("Orders")
                         .HasForeignKey("store_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ProjectDatabase.Models.Order_type", "Order_type")
-                        .WithMany("Order")
+                        .WithMany("Orders")
                         .HasForeignKey("type")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -466,7 +472,7 @@ namespace ProjectDatabase.Migrations
                         .IsRequired();
 
                     b.HasOne("ProjectDatabase.Models.Product", "Product")
-                        .WithMany("Orderline")
+                        .WithMany("Orderlines")
                         .HasForeignKey("product_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -479,7 +485,7 @@ namespace ProjectDatabase.Migrations
             modelBuilder.Entity("ProjectDatabase.Models.Product", b =>
                 {
                     b.HasOne("ProjectDatabase.Models.Product_type", "Product_type")
-                        .WithMany("Product")
+                        .WithMany("Products")
                         .HasForeignKey("type")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -490,13 +496,13 @@ namespace ProjectDatabase.Migrations
             modelBuilder.Entity("ProjectDatabase.Models.Store", b =>
                 {
                     b.HasOne("ProjectDatabase.Models.District", "District")
-                        .WithMany("Store")
+                        .WithMany("Stores")
                         .HasForeignKey("district_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ProjectDatabase.Models.Province", "Province")
-                        .WithMany("Store")
+                        .WithMany("Stores")
                         .HasForeignKey("province_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -509,13 +515,13 @@ namespace ProjectDatabase.Migrations
             modelBuilder.Entity("ProjectDatabase.Models.Store_product", b =>
                 {
                     b.HasOne("ProjectDatabase.Models.Product", "Product")
-                        .WithMany("Store_product")
+                        .WithMany("Store_products")
                         .HasForeignKey("product_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ProjectDatabase.Models.Store", "Store")
-                        .WithMany("Store_product")
+                        .WithMany("Store_products")
                         .HasForeignKey("store_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -528,13 +534,13 @@ namespace ProjectDatabase.Migrations
             modelBuilder.Entity("ProjectDatabase.Models.User", b =>
                 {
                     b.HasOne("ProjectDatabase.Models.Role", "Role")
-                        .WithMany("User")
+                        .WithMany("Users")
                         .HasForeignKey("role_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ProjectDatabase.Models.Store", "Store")
-                        .WithMany("User")
+                        .WithMany("Users")
                         .HasForeignKey("store_id");
 
                     b.Navigation("Role");
@@ -544,17 +550,17 @@ namespace ProjectDatabase.Migrations
 
             modelBuilder.Entity("ProjectDatabase.Models.Customer", b =>
                 {
-                    b.Navigation("Order");
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("ProjectDatabase.Models.District", b =>
                 {
-                    b.Navigation("Store");
+                    b.Navigation("Stores");
                 });
 
             modelBuilder.Entity("ProjectDatabase.Models.Membership", b =>
                 {
-                    b.Navigation("Customer");
+                    b.Navigation("Customers");
                 });
 
             modelBuilder.Entity("ProjectDatabase.Models.Order", b =>
@@ -564,45 +570,45 @@ namespace ProjectDatabase.Migrations
 
             modelBuilder.Entity("ProjectDatabase.Models.Order_type", b =>
                 {
-                    b.Navigation("Order");
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("ProjectDatabase.Models.Product", b =>
                 {
-                    b.Navigation("Orderline");
+                    b.Navigation("Orderlines");
 
-                    b.Navigation("Store_product");
+                    b.Navigation("Store_products");
                 });
 
             modelBuilder.Entity("ProjectDatabase.Models.Product_type", b =>
                 {
-                    b.Navigation("Product");
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("ProjectDatabase.Models.Province", b =>
                 {
-                    b.Navigation("District");
+                    b.Navigation("Districts");
 
-                    b.Navigation("Store");
+                    b.Navigation("Stores");
                 });
 
             modelBuilder.Entity("ProjectDatabase.Models.Role", b =>
                 {
-                    b.Navigation("User");
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("ProjectDatabase.Models.Store", b =>
                 {
-                    b.Navigation("Order");
+                    b.Navigation("Orders");
 
-                    b.Navigation("Store_product");
+                    b.Navigation("Store_products");
 
-                    b.Navigation("User");
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("ProjectDatabase.Models.User", b =>
                 {
-                    b.Navigation("Order");
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

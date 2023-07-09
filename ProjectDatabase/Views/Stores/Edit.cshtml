@@ -1,0 +1,78 @@
+﻿@model ProjectDatabase.Models.Store
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="text-2xl font-bold text-center">Edit Store</h1>
+
+<div class="flex justify-center">
+    <div class="w-2/3">
+        <form asp-action="Edit" class="needs-validation" novalidate>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="mb-4">
+                <label asp-for="name" class="block mb-1 font-bold">Name</label>
+                <input asp-for="name" class="w-full p-2 border border-gray-300 rounded" required />
+                <span asp-validation-for="name" class="text-danger"></span>
+            </div>
+            <div class="mb-4">
+                <label asp-for="description" class="block mb-1 font-bold">Description</label>
+                <input asp-for="description" class="w-full p-2 border border-gray-300 rounded" required />
+                <span asp-validation-for="description" class="text-danger"></span>
+            </div>
+            <div class="mb-4">
+                <label asp-for="province_id" class="block mb-1 font-bold">Province</label>
+                <select id="provinceSelect" asp-for="province_id" class="w-full p-3 border border-gray-300 rounded" asp-items="ViewBag.province_id">
+                    <option value="">--Select Province--</option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label asp-for="district_id" class="block mb-1 font-bold">District</label>
+                <select id="districtSelect" asp-for="district_id" class="w-full p-3 border border-gray-300 rounded" asp-items="ViewBag.district_id">
+                    <option value="">--Select District--</option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label asp-for="address" class="block mb-1 font-bold">Address</label>
+                <input asp-for="address" class="w-full p-2 border border-gray-300 rounded" required />
+                <span asp-validation-for="address" class="text-danger"></span>
+            </div>
+            <div class="flex justify-center">
+                <button type="submit" value="Save" class="px-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 w-full">Save</button>
+                
+            </div>
+            <div class="mt-4 text-center">
+                <a asp-action="Index" class="text-blue-500 hover:text-blue-600 underline">Back to List</a>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#provinceSelect').change(function () {
+            var provinceId = $(this).val();
+            if (provinceId) {
+                $.ajax({
+                    url: '/Stores/GetDistrictsByProvince', 
+                    type: 'POST',
+                    data: { provinceId: provinceId },
+                    success: function (result) {
+                        
+                        var districtSelect = $('#districtSelect');
+                        districtSelect.empty();
+                        $.each(result, function (index, district) {
+                            districtSelect.append($('<option></option>').val(district.value).text(district.text));
+                        });
+                    },
+                    error: function () {
+                      
+                    }
+                });
+            }
+        });
+    });
+</script>

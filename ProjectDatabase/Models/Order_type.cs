@@ -1,18 +1,17 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProjectDatabase.Models
 {
     public class Order_type
     {
         [Key]
+        public int id { get; set; }
         [Required]
-        [MaxLength(8)]
-        public string ? id { get; set; }
-        [Required]
-        [StringLength(100)]
+        [MaxLength(1000)]
         public string ? name { get; set; }
-        [StringLength(1000)]
+        [MaxLength(1000)]
         public string ? description { get; set; }
-        public ICollection<Order> Order { get; set; }
+        public ICollection<Order> ? Orders { get; set; }
     }
 }

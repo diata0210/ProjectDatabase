@@ -1,18 +1,20 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProjectDatabase.Models
 {
     public class Role
     {
         [Key]
-        [MaxLength(8)]
-        public string id { get; set; } = string.Empty;
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // Thiết lập tự động tăng cho ID
+
+        public int id { get; set; }
         [Required]
-        [StringLength(20)]
-        public string name { get; set; } = string.Empty;
-        [StringLength(1000)]
+        [MaxLength(1000)]
+        public string ? name { get; set; }
+        [MaxLength(1000)]
         public string description { get; set; } = string.Empty;
 
-        public ICollection<User> ? User { get; set; }
+        public ICollection<User> ? Users { get; set; }
     }
 }

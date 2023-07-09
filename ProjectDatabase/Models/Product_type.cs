@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProjectDatabase.Models
 {
@@ -6,15 +7,15 @@ namespace ProjectDatabase.Models
     {
         
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+
+        public int id { get; set; }
         [Required]
-        [MaxLength(8)]
-        public string? id { get; set; }
-        [Required]
-        [StringLength(100)]
+        [MaxLength(1000)]
         public string? name { get; set; }
-        [StringLength(1000)]
+        [MaxLength(1000)]
         public string? description { get; set; }
 
-        public ICollection<Product> ? Product { get; set; }
+        public ICollection<Product> ? Products { get; set; }
     }
 }

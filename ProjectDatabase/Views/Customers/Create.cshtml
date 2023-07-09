@@ -1,0 +1,44 @@
+﻿@model ProjectDatabase.Models.Customer
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="text-2xl font-bold text-center">Create Customer</h1>
+<div class="flex justify-center">
+    <div class="w-2/3">
+        <form asp-action="Create" class="needs-validation" novalidate>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="mb-4">
+
+                <label asp-for="name" class="block mb-1 font-bold">Name</label>
+                <input asp-for="name" class="w-full p-2 border border-gray-300 pl-3 rounded" required />
+                <span asp-validation-for="name" class="text-danger"></span>
+            </div>
+            <div class="mb-4">
+
+                <label asp-for="membership_id" class="block mb-1 font-bold">Product type</label>
+                <select asp-for="membership_id" class="w-full p-3 border border-gray-300 rounded" asp-items="ViewBag.membership_id"></select>
+            </div>
+            <div class="mb-4">
+
+                <label asp-for="phone" class="block mb-1 font-bold">Phone</label>
+                <input asp-for="phone" class="w-full p-2 border border-gray-300 pl-3 rounded" required />
+                <span asp-validation-for="name" class="text-danger"></span>
+            </div>
+            <div class="mb-4">
+
+                <label asp-for="dob" class="block mb-1 font-bold">Date of birth</label>
+                <input asp-for="dob" type="Date" class="w-full p-2 border border-gray-300 pl-3 rounded" required />
+                <span asp-validation-for="name" class="text-danger"></span>
+            </div>
+            <div class="flex justify-center">
+                <button type="submit" value="Create" class="w-full px-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600">Create</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="mt-4 text-center">
+    <a asp-action="Index" class="text-blue-500 hover:text-blue-600 underline">Back to List</a>
+</div>

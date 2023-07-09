@@ -1,4 +1,6 @@
-﻿@model User
+﻿@{
+    var user = ViewData["User"] as User;
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,13 +11,14 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
     <style>
         body, h1, h2, h3, h4, h5, h6 {
             font-family: "Raleway", sans-serif
         }
 
         body, html {
-            height: 100%;
             line-height: 1.8;
         }
     </style>
@@ -28,20 +31,66 @@
             <div class="w3-bar w3-white w3-card py-1" id="myNavbar">
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="w3-bar-item w3-button w3-wide">Logo</a>
                 <!-- Right-sided navbar links -->
-                <div class="w3-right w3-hide-small">
-                    <a class="w3-bar-item w3-button" asp-area="" asp-controller="Home" asp-action="Order">Order</a>
-                    <a asp-area="" asp-controller="Home" asp-action="Product" class="w3-bar-item w3-button">
-                        <i class="fa fa-user"></i>
-                        Product
-                    </a>
-                    <a asp-area=" " asp-controller="Home" asp-action="Revenue" class="w3-bar-item w3-button"><i class="fa fa-th"></i> Revenue</a>
-                    <a asp-area=" " asp-controller="Home" asp-action="Customer" class="w3-bar-item w3-button"><i class="fa fa-usd"></i> Customer</a>
+                <div class="w3-right w3-hide-small flex items-center">
+                    <a class="w3-bar-item w3-button" asp-area="" asp-controller="Orders" asp-action="index">Order</a>
+                    @if(User.IsInRole("1")){
+                            <select id="productDropdown" class="w3-bar-item w3-button" onchange="handleSelection(this)">
+                                <option value="/Products">Product</option>
+                                <option value="/storeProducts">Product of Store</option>
+                            </select>
+                        <a asp-area="" asp-controller="stores" asp-action="Index" class="w3-bar-item w3-button">
+                            <i class="fa fa-user"></i>
+                            Store
+                        </a>
+
+                    }
+                    else if (User.IsInRole("2"))
+                    {
+                        <a asp-area="" asp-controller="storeProducts" asp-action="Index" class="w3-bar-item w3-button">
+                            <i class="fa fa-user"></i>
+                            Product
+                        </a>
+                    }
+                    <a asp-area=" " asp-controller="customers" asp-action="index" class="w3-bar-item w3-button"><i class="fa fa-usd"></i> Customer</a>
+
                     @if(!User!.Identity!.IsAuthenticated){
                         <a asp-area=" " asp-controller="Account" asp-action="login" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i> Login</a>
+
                     }
                     else{
-                        <a asp-area=" " asp-controller="Account" asp-action="index" class="w3-bar-item w3-button rounded"><i class="fa fa-envelope">@(User.Identity.Name)</i></a>
-  
+                        if (User.IsInRole("1"))
+                        {
+                            <a asp-area=" " asp-controller="Users" asp-action="Index" class="w3-bar-item w3-button"><i class="fa fa-th"></i> Users</a>
+                            <a asp-area=" " asp-controller="Account" asp-action="index" class="w3-bar-item w3-button roundedr">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="28" viewBox="0 0 20 20" class="">
+                                <rect width="20" height="20" fill="#F2F2F2" />
+                                <rect x="2" y="2" width="16" height="16" fill="#FFFFFF" />
+                                <rect x="3" y="3" width="4" height="4" fill="#FF6666" />
+                                <rect x="8" y="3" width="4" height="4" fill="#FFCC66" />
+                                <rect x="13" y="3" width="4" height="4" fill="#66CC66" />
+                                <rect x="3" y="8" width="4" height="4" fill="#6699FF" />
+                                <rect x="8" y="8" width="4" height="4" fill="#CC66CC" />
+                                <rect x="13" y="8" width="4" height="4" fill="#FF6699" />
+                                <rect x="3" y="13" width="4" height="4" fill="#FFCC33" />
+                                <rect x="8" y="13" width="4" height="4" fill="#99CC66" />
+                                <rect x="13" y="13" width="4" height="4" fill="#3399CC" />
+                            </svg>
+                        </a>
+
+
+                        }
+                        else if (User.IsInRole("2"))
+                        {
+                            
+                            <a asp-area=" " asp-controller="Account" asp-action="Index" class="w3-bar-item w3-button">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="8" r="7" fill="#F2F2F2" />
+                                    <path d="M12 16c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm0-10c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zM20 21h-3.8c-.57 0-1.1-.28-1.42-.74-.32-.45-.42-1.01-.26-1.55l1.35-4.53c.08-.28.36-.48.66-.48h2.82c.3 0 .57.2.65.49l1.36 4.53c.16.54.06 1.1-.26 1.55-.32.46-.85.74-1.43.74zm-3.95-2l-1.01-3.37h2.02l-1.01 3.37z" fill="#333333" />
+                                </svg>
+                            </a>
+
+                        }
+                        
                     }
                         <a asp-area=" " asp-controller="Account" asp-action="Logout" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i> Logout</a>
                 </div>
@@ -54,14 +103,22 @@
         <nav class="w3-sidebar w3-bar-block w3-black w3-card w3-animate-left w3-hide-medium w3-hide-large" style="display:none" id="mySidebar">
             <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item w3-button w3-large w3-padding-16">Close ×</a>
             <a class="w3-bar-item w3-button" asp-area="" asp-controller="Home" asp-action="Order">Order</a>
-            <a asp-area="" asp-controller="Home" asp-action="Product" class="w3-bar-item w3-button"><i class="fa fa-user"></i>Product</a>
+            <a asp-area="" asp-controller="Products" asp-action="Index" class="w3-bar-item w3-button">
+                <i class="fa fa-user"></i>
+                Product
+            </a>
             <a asp-area=" " asp-controller="Home" asp-action="Revenue" class="w3-bar-item w3-button"><i class="fa fa-th"></i> Revenue</a>
-            <a asp-area=" " asp-controller="Home" asp-action="Customer" class="w3-bar-item w3-button"><i class="fa fa-usd"></i> Customer</a>
+            <a asp-area=" " asp-controller="customers" asp-action="index" class="w3-bar-item w3-button"><i class="fa fa-usd"></i> Customer</a>
+
             @if(!User!.Identity!.IsAuthenticated){
                   <a asp-area=" " asp-controller="Account" asp-action="login" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i> Login</a>
             }
             else{
-                  <a asp-area=" " asp-controller="Account" asp-action="index" class="w3-bar-item w3-button rounded"><i class="fa fa-envelope">@(User.Identity.Name)</i></a>
+                if (User.IsInRole("1"))
+                {
+                    <a asp-area=" " asp-controller="Users" asp-action="Index" class="w3-bar-item w3-button"><i class="fa fa-th"></i> Users</a>
+                }
+                <a asp-area=" " asp-controller="Account" asp-action="index" class="w3-bar-item w3-button rounded"><i class="fa fa-envelope">@(User.Identity.Name)</i></a>
             }
             <a asp-area=" " asp-controller="Account" asp-action="Logout" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i> Logout</a>
         </nav>
@@ -69,12 +126,13 @@
     <div class="w-full mt-20">
         <div class="w-4/5 m-auto">
             @RenderBody()
+            @RenderSection("Body", required: false)
+
             
         </div>
     </div>
     
     <script>
-        
         // Toggle between showing and hiding the sidebar when clicking the menu icon
         var mySidebar = document.getElementById("mySidebar");
 
@@ -91,5 +149,12 @@
             mySidebar.style.display = "none";
         }
     </script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+        @{
+        RenderSection("Script", required: false);
+    }
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

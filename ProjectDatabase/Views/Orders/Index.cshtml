@@ -1,0 +1,251 @@
+﻿@using System.Text;
+@using System.Globalization;
+@model OrderStoreModelView;
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var filter = Context.Request.Query["filter"].ToString();
+    var date = Context.Request.Query["date"].ToString();
+    var userInfo = ViewBag.userInfo;
+
+
+    IEnumerable<Order> filteredModel = Model!.Orders!;
+    if (User.IsInRole("1"))
+    {
+        if (filter == "")
+        {
+            filteredModel = Model!.Orders!.Where(x => x.store_id == 1 && (GetFormattedDate(x.create_at).Contains(date) || GetFormattedDate(x.update_at).Contains(date)));
+        }
+        else
+        {
+            filteredModel = Model!.Orders!.Where(x => x.store_id.ToString() == filter && (GetFormattedDate(x.create_at).Contains(date) || GetFormattedDate(x.update_at).Contains(date)));
+
+        }
+    }
+    else
+    {
+        filteredModel = Model!.Orders!.Where(x => (GetFormattedDate(x.create_at).Contains(date) || GetFormattedDate(x.update_at).Contains(date)));
+    }
+    var pageSize = 5;
+    var pageCount = (int)Math.Ceiling(filteredModel.Count() / (double)pageSize);
+    var currentPage = Context.Request.Query["page"].ToString() != "" ? Convert.ToInt32(Context.Request.Query["page"]) : 1;
+    var startPage = Math.Max(currentPage - 2, 1);
+    var endPage = Math.Min(currentPage + 2, pageCount);
+}
+@functions {
+    public static string GetFormattedDate(DateTime? dateObj)
+    {
+        if (dateObj.HasValue)
+        {
+            DateTime date = dateObj.Value;
+            var year = date.Year.ToString("0000");
+            var month = date.Month.ToString("00");
+            var day = date.Day.ToString("00");
+            return year + "-" + month + "-" + day;
+        }
+        else
+        {
+            return string.Empty;
+        }
+    }
+}
+<div class="flex justify-between h-full items-center">
+    <a asp-area="" asp-controller="orders" asp-action="index">List Orders</a>
+    <div class="flex items-center gap-2 py-1 border border-[1px] pr-1 ">
+        <input onkeydown="handleKeyDown(event)" type="date" id="dateInput" placeholder="yyyy-mm-dd" class="pl-3 border-r-[1px] outline-none pr-2" />
+        <button onclick="filterByDate()">
+            <svg width="20px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+            </svg>
+        </button>
+    </div>
+    @if (userInfo.Role == "1")
+    {
+        <select id="selected" class="p-2 border border-[1px] outline-none" onchange="filterByStore()">
+        @foreach (var item in Model.Stores!.OrderBy(x => x.id))
+        {
+            <option value="@item.id">@item.name</option>
+        }
+        </select>
+    }
+
+    <a asp-action="Create" class="text-blue-50s0 hover:text-blue-600 ">
+        <span title="Add Order">
+            <svg width="20px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+        </span>
+    </a>
+</div>
+
+<div class="overflow-auto mt-2">
+    <table class="min-w-full table-fixed divide-y divide-gray-200">
+        <thead>
+            <tr class="bg-gray-50">
+                <th scope="col" class="w-1/9 px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    ID
+                </th>
+                <th scope="col" class="w-1/9 px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Customer
+                </th>
+                <th scope="col" class="w-1/9 px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Note
+                </th>
+                <th scope="col" class="w-1/9 px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Final Price
+                </th>
+                <th scope="col" class="w-1/9 px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Create at
+                </th>
+                <th scope="col" class="w-1/9 px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Update at
+                </th>
+                <th scope="col" class="w-1/9 px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Create by
+                </th>
+                <th scope="col" class="w-1/9 px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Status
+                </th>
+
+                <th scope="col" class="w-1/9 px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+
+            @foreach (var item in filteredModel.OrderBy(x => x.id).Skip((currentPage - 1) * pageSize).Take(pageSize))
+            {
+                <tr class="border-b-[1px] h-20">
+                    <td class="px-2 py-4 text-left">
+                        @item.id
+                    </td>
+                    <td class="px-2 py-4 text-left">
+                        @if (@item.Customer?.name != null)
+                        {
+                            @item.Customer.name
+
+                        }
+                        else
+                        {
+                            <div>null</div>
+                        }
+                    </td>
+
+                    <td class="px-2 py-4 text-left">
+                        @item.note
+                    </td>
+                    <td class="px-2 py-4 text-left">
+                            @item.final_price đ
+                    </td>
+
+                    <td class="px-2 py-4 text-left">
+                        @item.create_at.ToString("dd/MM/yyyy")
+                    </td>
+                    <td class="px-2 py-4 text-left">
+                        @item.update_at
+                    </td>
+
+                    <td class="px-2 py-4 text-left">
+                            @item.User!.name
+                    </td>
+                    <td class="px-2 py-4 text-left">
+                            @item.status_id
+                    </td>
+                    <td class="px-2 py-4 text-left">
+                        <div class="flex justify-center">
+                            <a asp-action="Edit" asp-route-id="@item.id" class="text-blue-500 hover:text-blue-600">
+                                <span title="Edit">
+                                    <svg width="16px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <a asp-action="Details" asp-route-id="@item.id" class="text-blue-500 hover:text-blue-600">
+                                <span title="Details">
+                                    <svg width="16px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m5.231 13.481L15 17.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v16.5c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9zm3.75 11.625a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@item.id" class="text-red-500 hover:text-red-600">
+                                <span title="Delete">
+                                    <svg width="16px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                                    </svg>
+                                </span>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="pagination gap-10 flex items-center justify-center space-x-2 mt-4">
+        @if (pageCount > 1)
+        {
+            @if (currentPage > 1)
+            {
+                <a href="?filter=@filter&date=@date&page=1" class="page-link bg-blue-500 text-white px-4 py-2 rounded">First</a>
+                <a href="?filter=@filter&date=@date&page=@(currentPage - 1)" class="page-link bg-blue-500 text-white px-4 py-2 rounded">Previous</a>
+            }
+
+            @for (var i = startPage; i <= endPage; i++)
+            {
+                <a href="?filter=@filter&date=@date&page=@i" class="page-link bg-gray-200 text-blue-500 px-4 py-2 rounded @(i == currentPage ? "font-bold" : "")">@i</a>
+            }
+
+            @if (currentPage < pageCount)
+            {
+                <a href="?filter=@filter&date=@date&page=@(currentPage + 1)" class="page-link bg-blue-500 text-white px-4 py-2 rounded">Next</a>
+                <a href="?filter=@filter&date=@date&page=@pageCount" class="page-link bg-blue-500 text-white px-4 py-2 rounded">Last</a>
+            }
+        }
+    </div>
+</div>
+@section Script {
+    <script>
+        var filter = "@filter";
+        var date = "@date";
+        var role = "@userInfo.Role";
+        var store = "@userInfo.Store"
+        var dropdown = document.getElementById("selected");
+        for (var i = 0; i < dropdown.options.length; i++) {
+            if (filter === dropdown.options[i].value) {
+                dropdown.options[i].selected = true;
+                break;
+            }
+        }
+        function handleKeyDown(event) {
+            if (event.keyCode === 13) { // 13 là mã phím của nút Enter
+                event.preventDefault(); // Ngăn chặn hành vi mặc định của nút Enter
+                filterByDate();
+            }
+        }
+        function filterByStore() {
+            var searchSelect = document.getElementById("selected");
+            var searchValue = searchSelect.value;
+            var query = "?filter=" + searchValue;
+            if(date){
+                query += "&date=" +  date;
+            }
+            window.location.href = query;
+        }
+         function filterByDate() {
+            var dateInput = document.getElementById("dateInput");
+            if (role !== "1") {
+
+                var query = "?filter=" + store;
+            }
+            else {
+                var searchSelect = document.getElementById("selected");
+                var searchValue = searchSelect.value;
+                var query = "?filter=" + searchValue;
+
+            }
+            if (dateInput.value) {
+                query += "&date=" + dateInput.value;
+            }
+            window.location.href = query;
+        }
+    </script>
+}

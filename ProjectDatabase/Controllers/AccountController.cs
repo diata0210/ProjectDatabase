@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc;
-using ProjectDatabase.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using ProjectDatabase.Models;
+using Microsoft.AspNetCore.Authentication;
 
 namespace ProjectDatabase.Controllers
 {
@@ -40,23 +39,24 @@ namespace ProjectDatabase.Controllers
                 return View();
             }
 
-            var _user = _context!.User!.Where(m => m.username == user.username && m.password == user.password).FirstOrDefault();
+            var _user = _context!.Users!.Where(m => m.username == user.username && m.password == user.password).FirstOrDefault();
             if(_user == null)
             {
                 ViewBag.LoginStatus = 0;
             }
             else
             {
-                var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Name, _user.username),
-            new Claim("FullName", _user.name),
-            new Claim(ClaimTypes.Role, _user.role_id),
-        };
-
+                var claims = new List<Claim>{
+                    new Claim(ClaimTypes.Name, _user.username),
+                    new Claim("FullName", _user.name),
+                    new Claim(ClaimTypes.Role, _user.role_id.ToString())
+                };
+                if (!string.IsNullOrEmpty(_user.store_id.ToString()))
+                {
+                    claims.Add(new Claim("StoreId", _user.store_id.ToString()));
+                }
                 var claimsIdentity = new ClaimsIdentity(
                     claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
                 var authProperties = new AuthenticationProperties
                 {
                   
@@ -77,6 +77,6 @@ namespace ProjectDatabase.Controllers
                 CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login", "Account");
         }
-
+        
     }
 }

@@ -6,17 +6,16 @@ namespace ProjectDatabase.Models
     public class District
     {
         [Key]
-        [MaxLength(8)]
-        public string id { get; set; } = string.Empty;
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+
+        public int id { get; set; }
         [Required]
-        [StringLength(20)]
+        [MaxLength(1000)]
         public string name { get; set; } = string.Empty;
-        [ForeignKey("Province")]
-        [MaxLength(8)]
         [Required]
-        public string ? province_id { get; set; }
+        public int province_id { get; set; }
         public Province ? Province { get; set; }
-        public ICollection<Store> ? Store { get; set; }
+        public ICollection<Store> ? Stores { get; set; }
 
     }
 }
