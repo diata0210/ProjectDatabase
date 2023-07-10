@@ -1,0 +1,215 @@
+﻿@using System.Text;
+@using System.Globalization;
+@model StoreRevenueModelView
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var filter = Context.Request.Query["filter"].ToString();
+    var day = Context.Request.Query["day"].ToString();
+    var month = Context.Request.Query["month"].ToString();
+    var year = Context.Request.Query["year"].ToString();
+
+    var totalMonth = 0.00;
+    IEnumerable<Revenue> filteredModel = Model!.Revenues!;
+
+    if (filter == "")
+    {
+        filteredModel = Model.Revenues!.Where(x => x.store_id == 1);
+        if (day != "")
+        {
+            filteredModel = filteredModel.Where(x => x.day.ToString() == day && x.month.ToString() == month && x.year.ToString() == year);
+        }
+    }
+    else
+    {
+        filteredModel = Model.Revenues!.Where(x => x.store_id.ToString() == filter);
+        if (day != "")
+        {
+            filteredModel = filteredModel.Where(x => x.day.ToString() == day && x.month.ToString() == month && x.year.ToString() == year);
+        }
+        if(day == "" && month != "" && year != "")
+        {
+            filteredModel = filteredModel.Where(x=> x.month.ToString() == month && x.year.ToString() == year);
+            totalMonth = filteredModel.Sum(x => (double)x.revenue);
+        }
+        if (day == "" && month == "" && year != "")
+        {
+            filteredModel = filteredModel.Where(x => x.year.ToString() == year);
+            totalMonth = filteredModel.Sum(x => (double)x.revenue);
+        }
+    }
+
+    var pageSize = 5;
+    var pageCount = (int)Math.Ceiling(filteredModel.Count() / (double)pageSize);
+    var currentPage = Context.Request.Query["page"].ToString() != "" ? Convert.ToInt32(Context.Request.Query["page"]) : 1;
+    var startPage = Math.Max(currentPage - 2, 1);
+    var endPage = Math.Min(currentPage + 2, pageCount);
+}
+<div class="flex justify-between h-full items-center">
+    <a asp-area="" asp-controller="storeproducts" asp-action="index">Revenues</a>
+    <div class="flex items-center gap-2 py-1 border border-[1px] pr-1 ">
+        <input type="text" id="dateInput" placeholder="yyyy-mm-dd" class="pl-3 border-r-[1px] outline-none pr-2" />
+        <button onclick="filterByDate()">
+            <svg width="20px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+            </svg>
+        </button>
+    </div>
+        <select id="selected" class="p-2 border border-[1px] outline-none" onchange="filterByStore()">
+            @foreach (var value in Model.Stores!.OrderBy(x => x.id))
+            {
+                <option value="@value.id">@value.name</option>
+            }
+        </select>
+    <a asp-action="Create" class="text-blue-50s0 hover:text-blue-600 ">
+        <span title="Add new product">
+            <svg width="20px" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+        </span>
+    </a>
+</div>
+
+<div class="overflow-auto mt-2">
+    @if (day == "" && month != "" && year != "")
+    {
+        <div class="flex items-center gap-2">
+        <p>Total in</p>
+        <p>@month/ @year: </p>
+        <p>
+            @totalMonth đ
+        </p>
+        </div>
+    }
+    else if(day == "" && month == "" && year != ""){
+        <p>Total in </p>
+        <p>@month/ @year</p>
+        <p>
+            @totalMonth
+        </p>
+    }
+
+
+    <table class="min-w-full table-fixed divide-y divide-gray-200">
+        <thead>
+            <tr class="bg-gray-50">
+                <th scope="col" class="w-1/9 px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    ID
+                </th>
+                <th scope="col" class="w-1/6 px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Date
+                </th>
+                <th scope="col" class="w-1/6 px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Month
+                </th>
+                <th scope="col" class="w-1/6 px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Year
+                </th>
+                <th scope="col" class="w-1/4 px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Revenue
+                </th>
+
+        </tr>
+    </thead>
+    <tbody> 
+            
+            @foreach (var item in filteredModel.OrderBy(x => x.id).Skip((currentPage-1)*pageSize).Take(pageSize)){
+                <tr class="bg-gray-50">
+
+                    <td class="px-2 py-4 text-left">
+                        @item.id
+                    </td>
+                    <td class="px-2 py-4 text-left">
+                        @item.day
+                    </td>
+                    
+                    <td class="px-2 py-4 text-left">
+                        @item.month
+                    </td>
+                    <td class="px-2 py-4 text-left">
+                        @item.year 
+                    </td>
+
+                    <td class="px-2 py-4 text-left">
+                        @item.revenue đ
+                    </td>
+                    
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="pagination gap-10 flex items-center justify-center space-x-2 mt-4">
+        @if (pageCount > 1)
+        {
+            @if (currentPage > 1)
+            {
+                <a href="?filter=@filter&page=1" class="page-link bg-blue-500 text-white px-4 py-2 rounded">First</a>
+                <a href="?filter=@filter&page=@(currentPage - 1)" class="page-link bg-blue-500 text-white px-4 py-2 rounded">Previous</a>
+            }
+
+            @for (var i = startPage; i <= endPage; i++)
+            {
+                <a href="?filter=@filter&page=@i" class="page-link bg-gray-200 text-blue-500 px-4 py-2 rounded @(i == currentPage ? "font-bold" : "")">@i</a>
+            }
+
+            @if (currentPage < pageCount)
+            {
+                <a href="?filter=@filter&day=@day&month=@month&year=@year&page=@(currentPage + 1)" class="page-link bg-blue-500 text-white px-4 py-2 rounded">Next</a>
+                <a href="?filter=@filter&day=@day&month=@month&year=@year&page=@pageCount" class="page-link bg-blue-500 text-white px-4 py-2 rounded">Last</a>
+            }
+        }
+    </div>
+</div>
+<script>
+    var filter = "@filter";
+    var day = "@day";
+    var month = "@month";
+    var year = "@year";
+    var dropdown = document.getElementById("selected");
+    for (var i = 0; i < dropdown.options.length; i++) {
+        if (filter === dropdown.options[i].value) {
+            dropdown.options[i].selected = true;
+            break;
+        }
+    }
+    function filterByStore(){
+        var searchSelect = document.getElementById("selected");
+        var searchValue = searchSelect.value;
+        var query = "?filter=" + searchValue;
+        if (day && month && year) {
+            query += "&day=" + day + "&month=" + month + "&year=" + year;
+        } else if (!day && month && year) {
+            query += "&month=" + month + "&year=" + year;
+        }
+        else if (!month && year) {
+            query += "&year=" + year;
+        }
+        window.location.href = query;
+    }
+    function handleKeyDown(event) {
+        if (event.keyCode === 13) { // 13 là mã phím của nút Enter
+            event.preventDefault(); // Ngăn chặn hành vi mặc định của nút Enter
+            filterByDate();
+        }
+    }
+    function filterByDate(){
+        var date = document.getElementById("dateInput").value;
+        var searchSelect = document.getElementById("selected");
+        var dateParts = date.split("-");
+        var year1 = parseInt(dateParts[0]);
+        console.log(year1);
+        var month1 = parseInt(dateParts[1]);
+        var day1 = parseInt(dateParts[2]);
+        var searchValue = searchSelect.value;
+        var query = "?filter=" + searchValue;
+        if(day1 && month1 && year1){
+            query += "&day=" + day1 + "&month=" + month1 + "&year=" + year1;
+        }else if (!day1 && month1 && year1){
+            query +=  "&month=" + month1 + "&year=" + year1;
+        }
+        else if(!month1 && year1){
+            query += "&year=" + year1;
+        }
+        window.location.href = query;
+
+    }
+</script>
