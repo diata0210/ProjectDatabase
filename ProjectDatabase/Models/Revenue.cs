@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProjectDatabase.Models
@@ -9,12 +9,11 @@ namespace ProjectDatabase.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 
         public int id { get; set; }
+        public int day { get; set; }
         public int year { get; set; }
         public int month { get; set; }
-        public int day { get; set; }
-
+        public decimal revenue { get; set; } = 0;
         public int store_id { get; set; }
-
         public Store ? Store { get; set; }
 
         
