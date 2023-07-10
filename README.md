@@ -1,2 +1,3 @@
 # ProjectDatabase
-// Chưa hoàn thiện
+# lỗi selectlist
+# chưa hoàn thiện revenue 
