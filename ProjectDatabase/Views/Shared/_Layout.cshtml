@@ -1,4 +1,4 @@
-﻿@{
+@{
     var user = ViewData["User"] as User;
 }
 <!DOCTYPE html>
@@ -34,15 +34,14 @@
                 <div class="w3-right w3-hide-small flex items-center">
                     <a class="w3-bar-item w3-button" asp-area="" asp-controller="Orders" asp-action="index">Order</a>
                     @if(User.IsInRole("1")){
-                            <select id="productDropdown" class="w3-bar-item w3-button" onchange="handleSelection(this)">
-                                <option value="/Products">Product</option>
-                                <option value="/storeProducts">Product of Store</option>
-                            </select>
-                        <a asp-area="" asp-controller="stores" asp-action="Index" class="w3-bar-item w3-button">
-                            <i class="fa fa-user"></i>
-                            Store
-                        </a>
+                        <select id="productDropdown" class="w3-bar-item w3-button text-center" onchange="handleSelection()">
+                            <option class="text-left my-2" value="">Restaurant</option>
+                            <option class="text-left my-2" value="/Products" id="productOption">Product</option>
+                            <option class="text-left my-2" value="/Storeproducts" id="storeProductOption">Product of Store</option>
+                            <option class="text-left my-2" value="/Stores" id="storeOption">Store</option>
+                        </select>
 
+                        <a class="w3-bar-item w3-button" asp-area="" asp-controller="Revenues" asp-action="index">Revenues</a>
                     }
                     else if (User.IsInRole("2"))
                     {
@@ -133,6 +132,20 @@
     </div>
     
     <script>
+        var select = document.getElementById('productDropdown').value;
+        var dropdown = document.getElementById('productDropdown');
+        for (var i = 0; i < dropdown.options.length; i++) {
+            if (select === dropdown.options[i].value) {
+                dropdown.options[i].selected = true;
+                break;
+            }
+        }
+
+        function handleSelection() {
+            var select = document.getElementById('productDropdown').value;
+                window.location.href = select;
+        }
+
         // Toggle between showing and hiding the sidebar when clicking the menu icon
         var mySidebar = document.getElementById("mySidebar");
 
