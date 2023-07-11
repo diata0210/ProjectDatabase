@@ -5,81 +5,90 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+<h1 class="text-2xl font-bold text-center">Store of Details</h1>
 
-<div>
-    <h4>Order</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.total_price)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.total_price)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.status_id)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.status_id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.note)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.note)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Store)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Store.address)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.create_at)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.create_at)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.update_at)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.update_at)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Order_type)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Order_type.name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Customer)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Customer.name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.discount_membership)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.discount_membership)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.final_price)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.final_price)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<div class="my-4">
+    <form class="border border-gray-300 p-4 rounded">
+        <div class="my-4">
+            <dl class="grid grid-cols-2 gap-4">
+                <div>
+                    <dt class="font-bold">ID:</dt>
+                    <dd>@Html.DisplayFor(model => model.id)</dd>
+                </div>
+                <div>
+                    <dt class="font-bold">Customer Name:</dt>
+                    @if (Model.Customer != null)
+                    {
+                        <dd>@Html.DisplayFor(model => model.Customer!.name)</dd>
+                    }
+                </div>
+                <div>
+                    <dt class="font-bold">Note: </dt>
+                    <dd>@Html.DisplayFor(model => model.note)</dd>
+                </div>
+                <div>
+                    <dt class="font-bold">Total Price: </dt>
+                    <dd>@Html.DisplayFor(model => model.total_price)</dd>
+                </div>
+                <div>
+                    <dt class="font-bold">Discount membership: </dt>
+                    <dd>@Html.DisplayFor(model => model.discount_membership)</dd>
+                </div>
+                <div>
+                    <dt class="font-bold">Final price: </dt>
+                    <dd>@Html.DisplayFor(model => model.final_price)</dd>
+                </div>
+                <div>
+                    <dt class="font-bold">List orderlines: </dt>
+                    @if (Model.Orderlines != null)
+                    {
+                        @foreach (var item in Model.Orderlines.OrderBy(x => x.id))
+                        {
+                            <dd>@item.Product.name</dd>
+                        }
+                    }
+
+                </div>
+
+                <div>
+                    <dt class="font-bold">Discount membership: </dt>
+                    <dd>@Html.DisplayFor(model => model.status_id)</dd>
+                </div>
+                @if(Model.update_at != null)
+                {
+                    <div>
+                        <dt class="font-bold">Time: </dt>
+                        <dd>@Html.DisplayFor(model => model.update_at)</dd>
+                    </div>
+                }
+                else
+                {
+                    <div>
+                        <dt class="font-bold">Time: </dt>
+                        <dd>@Html.DisplayFor(model => model.create_at)</dd>
+                    </div>
+                }
+                <div>
+                    <dt class="font-bold">Create by: </dt>
+                    <dd>@Html.DisplayFor(model => model.User!.name)</dd>
+                </div>
+                <div>
+                    <dt class="font-bold">Status: </dt>
+                    <dd>@Html.DisplayFor(model => model.status_id)</dd>
+                </div>
+                <div>
+                    <dt class="font-bold">Store: </dt>
+                    <dd>@Html.DisplayFor(model => model.Store!.name)</dd>
+                </div>
+                <div>
+                    <dt class="font-bold">Order type: </dt>
+                    <dd>@Html.DisplayFor(model => model.Order_type.name)</dd>
+                </div>
+            </dl>
+        </div>
+        <div class="my-4">
+            <a href="@Url.Action("Edit", new { id = Model?.id })" class="px-4 py-2 bg-blue-500 text-white font-bold rounded hover:bg-blue-600">Edit</a>
+            <a href="@Url.Action("Index")" class="px-4 py-2 bg-blue-500 text-white font-bold rounded hover:bg-blue-600">Back to List</a>
+        </div>
+    </form>
 </div>

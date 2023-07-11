@@ -132,14 +132,6 @@
     </div>
     
     <script>
-        var select = document.getElementById('productDropdown').value;
-        var dropdown = document.getElementById('productDropdown');
-        for (var i = 0; i < dropdown.options.length; i++) {
-            if (select === dropdown.options[i].value) {
-                dropdown.options[i].selected = true;
-                break;
-            }
-        }
 
         function handleSelection() {
             var select = document.getElementById('productDropdown').value;

@@ -5,35 +5,36 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h1 class="text-2xl font-bold text-center">Create Product</h1>
 
-<h4>Store_product</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
+<div class="flex justify-center">
+    <div class="w-2/3">
+        <form asp-action="Create" class="needs-validation" novalidate>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="store_id" class="control-label"></label>
-                <select asp-for="store_id" class ="form-control" asp-items="ViewBag.store_id"></select>
+            <div class="mb-4">
+                <label asp-for="store_id" class="block mb-1 font-bold">Store</label>
+                <select asp-for="store_id" class="w-full p-2 border border-gray-300 pl-3 rounded" asp-items="ViewBag.store_id"></select>
             </div>
-            <div class="form-group">
-                <label asp-for="product_id" class="control-label"></label>
-                <select asp-for="product_id" class ="form-control" asp-items="ViewBag.product_id"></select>
+            <div class="mb-4">
+                <label asp-for="product_id" class="block mb-1 font-bold">Product</label>
+                <select asp-for="product_id" class="w-full p-2 border border-gray-300 pl-3 rounded" asp-items="ViewBag.product_id"></select>
             </div>
-            <div class="form-group">
-                <label asp-for="quantity" class="control-label"></label>
-                <input asp-for="quantity" class="form-control" />
+            <div class="mb-4">
+                <label asp-for="quantity" class="block mb-1 font-bold">Quantity</label>
+                <input asp-for="quantity" class="w-full p-2 border border-gray-300 pl-3 rounded" />
                 <span asp-validation-for="quantity" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <div class="flex justify-center">
+                <button type="submit" value="Create" class="w-full px-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600">Create</button>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="mt-4 text-center">
+    <a asp-action="Index" class="text-blue-500 hover:text-blue-600 underline">Back to List</a>
 </div>
-

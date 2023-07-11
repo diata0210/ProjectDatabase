@@ -3,6 +3,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using ProjectDatabase.Models;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.EntityFrameworkCore;
 
 namespace ProjectDatabase.Controllers
 {
@@ -14,6 +15,7 @@ namespace ProjectDatabase.Controllers
         }
         public IActionResult Index()
         {
+            
             return View();
         }
         public IActionResult Login()

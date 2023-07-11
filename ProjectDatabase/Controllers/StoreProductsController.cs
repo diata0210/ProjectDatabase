@@ -80,6 +80,7 @@ namespace ProjectDatabase.Controllers
         }
 
         // GET: StoreProducts/Create
+        [Authorize(Roles = "1")]
         public IActionResult Create()
         {
             ViewData["product_id"] = new SelectList(_context.Products, "id", "name");
@@ -92,6 +93,8 @@ namespace ProjectDatabase.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "1")]
+
         public async Task<IActionResult> Create([Bind("id,store_id,product_id,quantity")] Store_product store_product)
         {
             if (ModelState.IsValid)
