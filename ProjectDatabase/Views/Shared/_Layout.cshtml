@@ -35,7 +35,7 @@
                     <a class="w3-bar-item w3-button" asp-area="" asp-controller="Orders" asp-action="index">Order</a>
                     @if(User.IsInRole("1")){
                         <select id="productDropdown" class="w3-bar-item w3-button text-center" onchange="handleSelection()">
-                            <option class="text-left my-2" value="">Restaurant</option>
+                            <option value="" class="text-left">Restaurant</option>
                             <option class="text-left my-2" value="/Products" id="productOption">Product</option>
                             <option class="text-left my-2" value="/Storeproducts" id="storeProductOption">Product of Store</option>
                             <option class="text-left my-2" value="/Stores" id="storeOption">Store</option>
@@ -49,7 +49,7 @@
                             <i class="fa fa-user"></i>
                             Product
                         </a>
-                    }
+                     }
                     <a asp-area=" " asp-controller="customers" asp-action="index" class="w3-bar-item w3-button"><i class="fa fa-usd"></i> Customer</a>
 
                     @if(!User!.Identity!.IsAuthenticated){
@@ -132,12 +132,30 @@
     </div>
     
     <script>
-
         function handleSelection() {
-            var select = document.getElementById('productDropdown').value;
-                window.location.href = select;
+            var select = document.getElementById('productDropdown');
+            var selectedOption = select.options[select.selectedIndex];
+            var selectedText = selectedOption.text;
+            // Cập nhật giá trị hiển thị của select với giá trị đã chọn
+            select.options[0].text = selectedText;
+            // Lưu giá trị đã chọn vào Local Storage
+            localStorage.setItem('selectedOption', selectedText);
+
+            // Xử lý khi có lựa chọn mới được chọn
+            var selectedValue = select.value;
+            if (selectedValue) {
+                window.location.href = selectedValue;
+            }
         }
 
+        // Khôi phục giá trị đã chọn sau khi trang được tải lại
+        window.onload = function () {
+            var select = document.getElementById('productDropdown');
+            var selectedText = localStorage.getItem('selectedOption');
+            if (selectedText) {
+                select.options[0].text = selectedText;
+            }
+        };
         // Toggle between showing and hiding the sidebar when clicking the menu icon
         var mySidebar = document.getElementById("mySidebar");
 

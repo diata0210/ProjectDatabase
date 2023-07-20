@@ -55,8 +55,7 @@ namespace ProjectDatabase.Controllers
         }
 
             // GET: Orders/Details/5
-            public async Task<IActionResult> Details(int? id)
-        {
+            public async Task<IActionResult> Details(int? id){
             if (id == null || _context.Orders == null)
             {
                 return NotFound();
@@ -67,6 +66,8 @@ namespace ProjectDatabase.Controllers
                 .Include(o => o.Order_type)
                 .Include(o => o.Store)
                 .Include(o => o.User)
+                .Include(o => o.Orderlines)
+                    .ThenInclude(ol => ol.Product)
                 .FirstOrDefaultAsync(m => m.id == id);
             if (order == null)
             {

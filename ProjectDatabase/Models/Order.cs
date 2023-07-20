@@ -11,7 +11,7 @@ namespace ProjectDatabase.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
 
-        public decimal? total_price { get; set; }
+        public decimal? total_price { get; set; } = 0;
 
         [Required]
         public bool status_id { get; set; }
@@ -39,10 +39,10 @@ namespace ProjectDatabase.Models
         public int? customer_id { get; set; }
         public Customer? Customer { get; set; }
 
-        public decimal? discount_membership { get; set; }
+        public decimal? discount_membership { get; set; } = 0;
 
-        public decimal? final_price { get; set; }
+        public decimal? final_price { get; set; } = 0;
 
-        public ICollection<Orderline>? Orderlines { get; set; }
+        public virtual ICollection<Orderline>? Orderlines { get; set; }
     }
 }

@@ -31,6 +31,13 @@ namespace ProjectDatabase.Controllers
             };
             return View(newlist);
         }
+        public async Task<IActionResult> Detail(int ? id)
+        {
+            if(id == null || _context.Revenues == null){
+                return NotFound();
+            }
 
+            return View();
+        }
     }
 }

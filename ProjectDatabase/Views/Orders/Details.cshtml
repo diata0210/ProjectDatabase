@@ -5,84 +5,68 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1 class="text-2xl font-bold text-center">Store of Details</h1>
+<h1 class="text-2xl font-bold text-center">Order Details</h1>
 
 <div class="my-4">
-    <form class="border border-gray-300 p-4 rounded">
+    <div class="border border-gray-300 p-4 rounded">
         <div class="my-4">
             <dl class="grid grid-cols-2 gap-4">
                 <div>
-                    <dt class="font-bold">ID:</dt>
-                    <dd>@Html.DisplayFor(model => model.id)</dd>
-                </div>
-                <div>
                     <dt class="font-bold">Customer Name:</dt>
-                    @if (Model.Customer != null)
-                    {
-                        <dd>@Html.DisplayFor(model => model.Customer!.name)</dd>
-                    }
+                    <dd>@(Model.Customer?.name ?? "N/A")</dd>
                 </div>
                 <div>
                     <dt class="font-bold">Note: </dt>
-                    <dd>@Html.DisplayFor(model => model.note)</dd>
+                    <dd>@(Model.note ?? "N/A")</dd>
                 </div>
                 <div>
                     <dt class="font-bold">Total Price: </dt>
-                    <dd>@Html.DisplayFor(model => model.total_price)</dd>
+                    <dd>@(Model.total_price) đ</dd>
                 </div>
                 <div>
-                    <dt class="font-bold">Discount membership: </dt>
-                    <dd>@Html.DisplayFor(model => model.discount_membership)</dd>
-                </div>
-                <div>
-                    <dt class="font-bold">Final price: </dt>
-                    <dd>@Html.DisplayFor(model => model.final_price)</dd>
-                </div>
-                <div>
-                    <dt class="font-bold">List orderlines: </dt>
-                    @if (Model.Orderlines != null)
+                    <dt class="font-bold">List Orderlines: </dt>
+                    @if (Model.Orderlines != null && Model.Orderlines.Any())
                     {
-                        @foreach (var item in Model.Orderlines.OrderBy(x => x.id))
-                        {
-                            <dd>@item.Product.name</dd>
-                        }
+                        <ul class="list-disc list-inside">
+                            @foreach (var item in Model.Orderlines.OrderBy(x => x.id))
+                            {
+                                <li>@item.Product?.name - Quantity: @item.quantity - Price: @item.Product?.price đ</li>
+                            }
+                        </ul>
                     }
-
+                    else
+                    {
+                        <dd>No Orderlines</dd>
+                    }
+                </div>
+                <div>
+                    <dt class="font-bold">Discount Membership: </dt>
+                    <dd>@(Model.discount_membership) đ</dd>
+                </div>
+                <div>
+                    <dt class="font-bold">Final Price: </dt>
+                    <dd>@(Model.final_price) đ</dd>
                 </div>
 
                 <div>
-                    <dt class="font-bold">Discount membership: </dt>
-                    <dd>@Html.DisplayFor(model => model.status_id)</dd>
+                    <dt class="font-bold">Time: </dt>
+                    <dd>@(Model.update_at ?? Model.create_at)</dd>
                 </div>
-                @if(Model.update_at != null)
-                {
-                    <div>
-                        <dt class="font-bold">Time: </dt>
-                        <dd>@Html.DisplayFor(model => model.update_at)</dd>
-                    </div>
-                }
-                else
-                {
-                    <div>
-                        <dt class="font-bold">Time: </dt>
-                        <dd>@Html.DisplayFor(model => model.create_at)</dd>
-                    </div>
-                }
                 <div>
-                    <dt class="font-bold">Create by: </dt>
-                    <dd>@Html.DisplayFor(model => model.User!.name)</dd>
+                    <dt class="font-bold">Created By: </dt>
+                    <dd>@(Model.User?.name ?? "N/A")</dd>
                 </div>
                 <div>
                     <dt class="font-bold">Status: </dt>
-                    <dd>@Html.DisplayFor(model => model.status_id)</dd>
+                    <dd>@(Model.status_id ? "Completed" : "Pending")</dd>
                 </div>
                 <div>
                     <dt class="font-bold">Store: </dt>
-                    <dd>@Html.DisplayFor(model => model.Store!.name)</dd>
+                    <dd>@(Model.Store?.name ?? "N/A")</dd>
                 </div>
                 <div>
-                    <dt class="font-bold">Order type: </dt>
-                    <dd>@Html.DisplayFor(model => model.Order_type.name)</dd>
+                    <dt class="font-bold">Order Type: </dt>
+                    <dd>@(Model.Order_type?.name ?? "N/A")</dd>
                 </div>
             </dl>
         </div>
@@ -90,5 +74,5 @@
             <a href="@Url.Action("Edit", new { id = Model?.id })" class="px-4 py-2 bg-blue-500 text-white font-bold rounded hover:bg-blue-600">Edit</a>
             <a href="@Url.Action("Index")" class="px-4 py-2 bg-blue-500 text-white font-bold rounded hover:bg-blue-600">Back to List</a>
         </div>
-    </form>
+    </div>
 </div>
